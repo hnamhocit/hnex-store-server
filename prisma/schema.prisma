@@ -32,6 +32,19 @@ model User {
   backgroundURL String?
   activationCode String?
   actionationCodeExpiredIn DateTime?
+  uploads Upload[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Upload {
+	id String @id @default(uuid())
+	buffer Bytes
+	contentType String
+	name String
+	size Int
+	userId String
+	user User @relation(fields: [userId], references: [id])
+	createdAt DateTime @default(now())
+  	updatedAt DateTime @updatedAt
 }

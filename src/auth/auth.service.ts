@@ -60,7 +60,7 @@ export class AuthService {
 			throw new ConflictException('User already exists!');
 		}
 
-		const hashedPassword = await hash(registerDto.displayName);
+		const hashedPassword = await hash(registerDto.password);
 		const OTP = generateOTP();
 		const expiresIn = new Date(Date.now() + 5 * 60 * 1000);
 

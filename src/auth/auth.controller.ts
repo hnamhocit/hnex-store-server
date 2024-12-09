@@ -7,9 +7,9 @@ import {
 	Req,
 	UseGuards,
 } from '@nestjs/common';
-
 import { Request } from 'express';
-import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+
+import { RefreshTokenGuard } from '../common/guards/refresh-token.guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
