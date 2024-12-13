@@ -7,6 +7,7 @@ export class UsersService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async getMe(id: string) {
-		return await this.prismaService.user.findUnique({ where: { id } });
+		const me = await this.prismaService.user.findUnique({ where: { id } });
+		return { data: me };
 	}
 }

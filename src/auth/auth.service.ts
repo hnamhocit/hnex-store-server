@@ -1,10 +1,4 @@
-import {
-	BadRequestException,
-	ConflictException,
-	Injectable,
-	NotFoundException,
-	UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -31,9 +25,10 @@ export class AuthService {
 		});
 
 		if (!existingUser) {
-			throw new NotFoundException(
-				`User with email ${loginDto.email} not found!`,
-			);
+			return {
+				code: 404,
+				error: `User with email ${loginDto.email} not found!`,
+			};
 		}
 
 		const pwMatches = await verify(
@@ -42,13 +37,16 @@ export class AuthService {
 		);
 
 		if (!pwMatches) {
-			throw new BadRequestException('Password is incorrect!');
+			return {
+				code: 400,
+				error: 'Password is incorrect!',
+			};
 		}
 
 		const tokens = await this.getTokens(existingUser);
 		this.updateRefreshToken(existingUser.id, tokens.refreshToken);
 
-		return tokens;
+		return { code: 200, data: tokens };
 	}
 
 	async register(registerDto: RegisterDto) {
@@ -57,7 +55,10 @@ export class AuthService {
 		});
 
 		if (existingUser) {
-			throw new ConflictException('User already exists!');
+			return {
+				code: 409,
+				error: 'User already exists!',
+			};
 		}
 
 		const hashedPassword = await hash(registerDto.password);
@@ -82,7 +83,7 @@ export class AuthService {
 		const tokens = await this.getTokens(newUser);
 		await this.updateRefreshToken(newUser.id, tokens.refreshToken);
 
-		return tokens;
+		return { code: 201, data: tokens };
 	}
 
 	async logout(id: string) {
@@ -95,7 +96,10 @@ export class AuthService {
 		});
 
 		if (!user || !user.refreshToken) {
-			throw new UnauthorizedException('Access denied');
+			return {
+				code: 401,
+				error: 'Access denied!',
+			};
 		}
 
 		const refreshTokenMatches = await verify(
@@ -104,13 +108,16 @@ export class AuthService {
 		);
 
 		if (!refreshTokenMatches) {
-			throw new UnauthorizedException('Access denied!');
+			return {
+				code: 401,
+				error: 'Access denied!',
+			};
 		}
 
 		const tokens = await this.getTokens(user);
 		await this.updateRefreshToken(id, tokens.refreshToken);
 
-		return tokens;
+		return { code: 200, data: tokens };
 	}
 
 	async updateRefreshToken(id: string, refreshToken: string | null) {
