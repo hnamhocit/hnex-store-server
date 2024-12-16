@@ -25,7 +25,7 @@ export class TransformInterceptor<T>
 			map((response) => {
 				return {
 					code: response.code || 200,
-					data: response.data,
+					data: response.data || null,
 					error: response.error,
 				};
 			}),

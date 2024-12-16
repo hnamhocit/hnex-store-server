@@ -7,8 +7,6 @@ export class UploadService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async upload(file: Express.Multer.File, userId: string) {
-		console.log({ file });
-
 		const data = {
 			buffer: file.buffer,
 			name: file.originalname,
@@ -21,7 +19,7 @@ export class UploadService {
 			data: data,
 		});
 
-		return newPhoto;
+		return { data: newPhoto };
 	}
 
 	async uploads(files: Express.Multer.File[], userId: string) {
@@ -29,7 +27,7 @@ export class UploadService {
 			return await this.upload(file, userId);
 		});
 
-		return newPhotos;
+		return { data: newPhotos };
 	}
 
 	async getPhoto(id: string) {

@@ -33,6 +33,9 @@ model User {
   activationCode String?
   actionationCodeExpiredIn DateTime?
   uploads Upload[]
+  posts Post[]
+  comments Comment[]
+  reactions Reaction[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -47,4 +50,39 @@ model Upload {
 	user User @relation(fields: [userId], references: [id])
 	createdAt DateTime @default(now())
   	updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id String @id @default(uuid())
+  content String
+  imageIds String[]
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  reactions Reaction[]
+  comments Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+	id String @id @default(uuid())
+	content String
+	postId String
+	post Post @relation(fields: [postId], references: [id])
+	userId String
+	user User @relation(fields: [userId], references: [id])
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+
+model Reaction {
+	id String @id @default(uuid())
+	name String
+	postId String
+	post Post @relation(fields: [postId], references: [id])
+	userId String
+	user User @relation(fields: [userId], references: [id])
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
 }

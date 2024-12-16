@@ -1,4 +1,13 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Patch,
+	Req,
+	UseGuards,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
 import { UsersService } from './users.service';
@@ -10,6 +19,24 @@ export class UsersController {
 	@UseGuards(AccessTokenGuard)
 	@Get('me')
 	async getMe(@Req() req: Request) {
-		return await this.usersService.getMe(req.user['sub']);
+		return await this.usersService.getProfile(req.user['sub']);
+	}
+
+	@UseGuards(AccessTokenGuard)
+	@Get('me/logout')
+	async meLogout(@Req() req: Request) {
+		return await this.usersService.logout(req.user['sub']);
+	}
+
+	@UseGuards(AccessTokenGuard)
+	@Delete('me')
+	async deleteMe(@Req() req: Request) {
+		return await this.usersService.delete(req.user['sub']);
+	}
+
+	@UseGuards(AccessTokenGuard)
+	@Patch('me')
+	async updateMe(@Req() req: Request, @Body() body: Prisma.UserUpdateInput) {
+		return await this.usersService.update(req.user['sub'], body);
 	}
 }
