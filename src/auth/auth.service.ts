@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
 
-import { MailService } from '../mail/mail.service';
+import { MailsService } from '../mails/mails.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateOTP } from '../utils/generateOTP';
 import { LoginDto } from './dtos/login.dto';
@@ -16,7 +16,7 @@ export class AuthService {
 		private readonly prismaService: PrismaService,
 		private readonly configService: ConfigService,
 		private readonly jwtService: JwtService,
-		private readonly mailService: MailService,
+		private readonly mailsService: MailsService,
 	) {}
 
 	async login(loginDto: LoginDto) {
@@ -74,7 +74,7 @@ export class AuthService {
 			},
 		});
 
-		await this.mailService.sendActivationMail(
+		await this.mailsService.sendActivationMail(
 			newUser.email,
 			newUser.displayName,
 			OTP,

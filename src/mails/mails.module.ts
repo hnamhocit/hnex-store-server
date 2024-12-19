@@ -4,7 +4,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 
-import { MailService } from './mail.service';
+import { MediaModule } from '../media/media.module';
+import { MailsService } from './mails.service';
 
 @Module({
 	imports: [
@@ -32,8 +33,9 @@ import { MailService } from './mail.service';
 				},
 			}),
 		}),
+		MediaModule,
 	],
-	providers: [MailService],
-	exports: [MailService],
+	providers: [MailsService],
+	exports: [MailsService],
 })
-export class MailModule {}
+export class MailsModule {}

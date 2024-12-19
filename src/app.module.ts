@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { MailModule } from './mail/mail.module';
+import { MediaModule } from './media/media.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
-import { UploadModule } from './upload/upload.module';
+import { ReactionsModule } from './reactions/reactions.module';
+import { PostsModule } from './posts/posts.module';
+import { FollowsModule } from './follows/follows.module';
+import { CommentsModule } from './comments/comments.module';
+import { MailsModule } from './mails/mails.module';
 
 @Module({
 	imports: [
@@ -15,10 +17,12 @@ import { UploadModule } from './upload/upload.module';
 		PrismaModule,
 		UsersModule,
 		AuthModule,
-		MailModule,
-		UploadModule,
+		MediaModule,
+		ReactionsModule,
+		PostsModule,
+		FollowsModule,
+		CommentsModule,
+		MailsModule,
 	],
-	controllers: [AppController],
-	providers: [AppService],
 })
 export class AppModule {}
